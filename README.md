@@ -118,14 +118,3 @@ A página fica acessível em:
 📄 Licença
 
 MIT License — Livre para uso comercial ou pessoal.
-
-🤝 Contribuições
-
-Sinta-se livre para abrir PRs ou Issues!
-
-Se quiser, posso gerar um README com prints e GIFs, ou criar também:
-
-🔧 CI/CD
-🐳 Dockerfile + Docker Compose
-📊 Documentação Swagger
-🏷️ Badge de cobertura de testes
