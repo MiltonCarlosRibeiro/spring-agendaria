@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:sqlite:./data/agendaria.db
+    driver-class-name: org.sqlite.JDBC
+
+  jpa:
+    # Dialect correto para Hibernate 6 + hibernate-community-dialects
+    database-platform: org.hibernate.community.dialect.SQLiteDialect
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+server:
+  port: 8080
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG

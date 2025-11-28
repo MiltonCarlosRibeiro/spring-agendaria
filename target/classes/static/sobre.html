@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <title>Sobre nós - Agendaria</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/assets/css/style.css" />
+</head>
+<body>
+<header class="app-header">
+    <div class="header-left">
+        <div class="logo logo-placeholder"></div>
+        <div class="brand">
+            <span class="brand-title">Agendaria</span>
+            <span class="brand-subtitle">Agenda para Microempreendedores</span>
+        </div>
+    </div>
+    <nav class="nav">
+        <a href="/" class="nav-link" data-page="home">Home</a>
+        <a href="/sobre.html" class="nav-link active" data-page="sobre">Sobre nós</a>
+        <a href="/produtos.html" class="nav-link" data-page="produtos">Procedimentos</a>
+    </nav>
+</header>
+
+<main class="app-main">
+    <section class="section">
+        <div class="section-header">
+            <h1>Sobre o Agendaria</h1>
+        </div>
+        <article class="text-block">
+            <p>
+                O Agendaria nasceu pensando em microempreendedores que precisam de
+                uma ferramenta simples, offline-friendly e acessível, para organizar
+                seus horários sem depender de planilhas bagunçadas ou agendas de papel.
+            </p>
+            <p>
+                Ideal para clínicas de estética, cabeleireiros, barbeiros, manicures,
+                tatuadores e qualquer profissional que trabalha por horário marcado.
+            </p>
+            <h2>Principais objetivos</h2>
+            <ul>
+                <li>Facilitar a criação e gestão de procedimentos.</li>
+                <li>Oferecer uma visão clara da agenda do dia e da semana.</li>
+                <li>Permitir automação de agendamentos e lembretes.</li>
+                <li>Integrar com WhatsApp para tirar dúvidas e confirmar horários.</li>
+            </ul>
+
+            <h2>Como funciona a hospedagem</h2>
+            <p>
+                Cada cliente utiliza seu próprio container Docker com uma base SQLite
+                local, garantindo isolamento e independência. Se a assinatura não for
+                renovada, o container é pausado e pode ser retomado depois sem perda
+                de dados.
+            </p>
+        </article>
+    </section>
+</main>
+
+<footer class="app-footer">
+    <span>© <span id="yearFooter"></span> Agendaria - Todos os direitos reservados.</span>
+</footer>
+
+<script src="/assets/js/main.js"></script>
+</body>
+</html>
