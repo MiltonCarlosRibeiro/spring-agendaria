@@ -33,20 +33,19 @@ public class AppointmentController {
 
     private final DateTimeFormatter ISO = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
-    /**
-     * Business padrão: ID = 1 (agora como Long)
-     */
     private Business getDefaultBusiness() {
-        return businessRepository.findById(1L)   // <<< IMPORTANTE: 1L (Long)
+        return businessRepository.findById(1)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.INTERNAL_SERVER_ERROR,
                         "Business padrão não encontrado (id=1)"
                 ));
     }
 
+    /** Agendar próximo horário disponível */
     @PostMapping("/next")
     @ResponseStatus(HttpStatus.CREATED)
     public AppointmentResponseDto scheduleNext(@RequestBody AppointmentRequestDto dto) {
+
         Business business = getDefaultBusiness();
 
         Customer customer = customerRepository.findById(dto.getCustomerId())
@@ -57,26 +56,36 @@ public class AppointmentController {
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Procedimento não encontrado"));
 
-        Appointment appointment = schedulingService.scheduleNext(business, customer, procedure);
+        Appointment appointment = schedulingService.scheduleNext(
+                business, customer, procedure
+        );
+
         return toDto(appointment);
     }
 
+    /** Cancelar */
     @PostMapping("/{id}/cancel")
-    public AppointmentResponseDto cancel(@PathVariable Long id,
+    public AppointmentResponseDto cancel(@PathVariable Integer id,
                                          @RequestBody CancelRescheduleDto dto) {
+
         Appointment appt = appointmentService.cancel(id, dto.getReason());
         return toDto(appt);
     }
 
+    /** Reagendar automaticamente para o próximo horário */
     @PostMapping("/{id}/reschedule-next")
-    public AppointmentResponseDto rescheduleNext(@PathVariable Long id) {
+    public AppointmentResponseDto rescheduleNext(@PathVariable Integer id) {
+
         Appointment newAppt = appointmentService.rescheduleNext(id);
         return toDto(newAppt);
     }
 
+    /** Lista todos os próximos agendamentos */
     @GetMapping("/next-list")
     public List<AppointmentResponseDto> listNext() {
+
         Business business = getDefaultBusiness();
+
         return appointmentService.listNextAppointments(business)
                 .stream()
                 .map(this::toDto)
@@ -85,7 +94,7 @@ public class AppointmentController {
 
     private AppointmentResponseDto toDto(Appointment a) {
         return AppointmentResponseDto.builder()
-                .id(a.getId())  // getId() é Long
+                .id(a.getId())
                 .customerName(a.getCustomer() != null ? a.getCustomer().getName() : "")
                 .procedureName(a.getProcedure() != null ? a.getProcedure().getName() : "")
                 .startDateTime(a.getStartDateTime().format(ISO))

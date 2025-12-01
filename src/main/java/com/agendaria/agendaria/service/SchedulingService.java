@@ -20,53 +20,58 @@ public class SchedulingService {
 
     private final AppointmentRepository appointmentRepository;
 
-    private final LocalTime START_OF_DAY = LocalTime.of(9, 0);
-    private final LocalTime END_OF_DAY = LocalTime.of(18, 0);
-    private final int SLOT_MINUTES = 15;
+    private static final LocalTime START_OF_DAY = LocalTime.of(9, 0);
+    private static final LocalTime END_OF_DAY   = LocalTime.of(18, 0);
+    private static final int SLOT_MINUTES = 15;
 
     public LocalDateTime findNextAvailableSlot(Business business, Procedure procedure) {
-        LocalDate date = LocalDate.now();
-        for (int dayOffset = 0; dayOffset < 30; dayOffset++) {
-            LocalDate currentDate = date.plusDays(dayOffset);
-            LocalDateTime slot = findSlotForDate(business, procedure, currentDate);
-            if (slot != null) {
-                return slot;
-            }
-        }
-        return null;
-    }
-
-    private LocalDateTime findSlotForDate(Business business, Procedure procedure, LocalDate date) {
-
-        LocalDateTime from = LocalDateTime.of(date, START_OF_DAY);
-        LocalDateTime to = LocalDateTime.of(date, END_OF_DAY);
-
-        List<Appointment> appointments =
-                appointmentRepository.findByBusinessAndStartDateTimeBetween(
-                        business, from, to);
 
         int duration = procedure.getDurationMinutes();
+        LocalDate baseDate = LocalDate.now();
+
+        for (int offset = 0; offset < 30; offset++) {
+            LocalDate date = baseDate.plusDays(offset);
+
+            LocalDateTime available = findSlotForDate(business, duration, date);
+
+            if (available != null) {
+                return available;
+            }
+        }
+
+        return null; // sem horário nos próximos 30 dias
+    }
+
+    private LocalDateTime findSlotForDate(Business business, int duration, LocalDate date) {
+
+        LocalDateTime from = LocalDateTime.of(date, START_OF_DAY);
+        LocalDateTime to   = LocalDateTime.of(date, END_OF_DAY);
+
+        List<Appointment> appointments =
+                appointmentRepository.findByBusinessAndStartDateTimeBetween(business, from, to);
 
         LocalDateTime candidate = from;
 
         while (!candidate.plusMinutes(duration).isAfter(to)) {
 
-            // variáveis finais para o lambda
-            final LocalDateTime candStart = candidate;
-            final LocalDateTime candEnd = candidate.plusMinutes(duration);
+            LocalDateTime candidateEnd = candidate.plusMinutes(duration);
 
-            boolean overlaps = appointments.stream()
-                    .anyMatch(a ->
-                            a.getStatus() == AppointmentStatus.BOOKED &&
-                                    intervalsOverlap(
-                                            candStart,
-                                            candEnd,
-                                            a.getStartDateTime(),
-                                            a.getEndDateTime())
-                    );
+            // cópias efetivamente finais para usar na lambda
+            final LocalDateTime slotStart = candidate;
+            final LocalDateTime slotEnd   = candidateEnd;
+
+            boolean overlaps = appointments.stream().anyMatch(a ->
+                    a.getStatus() == AppointmentStatus.BOOKED
+                            && intervalsOverlap(
+                            slotStart,
+                            slotEnd,
+                            a.getStartDateTime(),
+                            a.getEndDateTime()
+                    )
+            );
 
             if (!overlaps) {
-                return candStart;
+                return candidate;
             }
 
             candidate = candidate.plusMinutes(SLOT_MINUTES);
@@ -75,19 +80,23 @@ public class SchedulingService {
         return null;
     }
 
-
-    private boolean intervalsOverlap(LocalDateTime start1, LocalDateTime end1,
-                                     LocalDateTime start2, LocalDateTime end2) {
-        return !start1.isAfter(end2) && !start2.isAfter(end1);
+    private boolean intervalsOverlap(
+            LocalDateTime s1, LocalDateTime e1,
+            LocalDateTime s2, LocalDateTime e2
+    ) {
+        return !s1.isAfter(e2) && !s2.isAfter(e1);
     }
 
     public Appointment scheduleNext(Business business, Customer customer, Procedure procedure) {
+
         LocalDateTime start = findNextAvailableSlot(business, procedure);
+
         if (start == null) {
-            throw new IllegalStateException("Sem horários disponíveis nos próximos 30 dias");
+            throw new IllegalStateException("Sem horários disponíveis nos próximos 30 dias.");
         }
 
         LocalDateTime end = start.plusMinutes(procedure.getDurationMinutes());
+
         Appointment appointment = Appointment.builder()
                 .business(business)
                 .customer(customer)

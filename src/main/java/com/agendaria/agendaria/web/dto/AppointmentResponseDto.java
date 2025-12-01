@@ -11,9 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AppointmentResponseDto {
 
-    // IMPORTANTÍSSIMO: Long, não Integer
-    private Long id;
-
+    private Integer id;
     private String customerName;
     private String procedureName;
     private String startDateTime;

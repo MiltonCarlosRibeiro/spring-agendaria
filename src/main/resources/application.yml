@@ -7,7 +7,7 @@ spring:
     # Dialect correto para Hibernate 6 + hibernate-community-dialects
     database-platform: org.hibernate.community.dialect.SQLiteDialect
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true

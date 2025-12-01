@@ -7,15 +7,11 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(
-        name = "appointments",
+@Table(name = "appointments",
         indexes = {
-                @Index(
-                        name = "idx_appointment_business_datetime",
-                        columnList = "business_id, start_date_time"
-                )
-        }
-)
+                @Index(name = "idx_appointment_business_datetime",
+                        columnList = "business_id, start_date_time")
+        })
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,9 +20,7 @@ public class Appointment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    // Em SQLite, AUTOINCREMENT é permitido em INTEGER PRIMARY KEY
-    // portanto o tipo Java ideal aqui é Integer
-    private Integer id;
+    private Integer id; // AGORA INTEGER
 
     @Column(name = "start_date_time", nullable = false)
     private LocalDateTime startDateTime;

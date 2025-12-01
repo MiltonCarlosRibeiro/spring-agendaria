@@ -13,7 +13,7 @@ public class Procedure {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id; // Integer
 
     @Column(nullable = false)
     private String name;
@@ -25,7 +25,7 @@ public class Procedure {
     private Double price;
 
     @Column(nullable = false)
-    private Boolean active = true;
+    private Integer active;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "business_id")

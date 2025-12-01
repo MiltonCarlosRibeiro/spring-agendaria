@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class AppointmentRequestDto {
-    private Long customerId;
-    private Long procedureId;
+    private Integer customerId;
+    private Integer procedureId;
 }

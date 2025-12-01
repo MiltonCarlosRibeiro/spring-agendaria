@@ -3,8 +3,6 @@ package com.agendaria.agendaria.domain.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "businesses")
 @Data
@@ -15,7 +13,7 @@ public class Business {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;  // Agora Integer
 
     @Column(nullable = false)
     private String name;
@@ -25,5 +23,5 @@ public class Business {
     private String phone;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private String createdAt;
 }
