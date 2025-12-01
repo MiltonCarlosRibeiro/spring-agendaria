@@ -1,5 +1,5 @@
 CREATE TABLE businesses (
-    id BIGINT PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     slug TEXT,
     phone TEXT,
@@ -7,7 +7,7 @@ CREATE TABLE businesses (
 );
 
 CREATE TABLE procedures (
-    id BIGINT PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     duration_minutes INTEGER NOT NULL,
     price REAL NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE procedures (
 );
 
 CREATE TABLE customers (
-    id BIGINT PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     phone TEXT NOT NULL,
     notes TEXT,
@@ -26,7 +26,7 @@ CREATE TABLE customers (
 );
 
 CREATE TABLE appointments (
-    id BIGINT PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     start_date_time TEXT NOT NULL,
     end_date_time TEXT NOT NULL,
     status TEXT NOT NULL,
