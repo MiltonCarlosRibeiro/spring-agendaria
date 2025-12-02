@@ -45,4 +45,36 @@ const Api = (() => {
 
         chatAsk: (message) => post("/api/chat/ask", { message }),
     };
-})();
+
+    async function deleteRequest(url) {
+            const resp = await fetch(url, {
+                method: "DELETE",
+            });
+            if (!resp.ok) throw new Error(`Erro DELETE ${url}`);
+            // Retorna um objeto vazio ou true/false, já que 204 (No Content) não tem corpo.
+            return true;
+        }
+
+        return {
+            // ... (funções de Procedimentos existentes) ...
+            listProcedures: () => get("/api/procedures"),
+            createProcedure: (data) => post("/api/procedures", data),
+            updateProcedure: (id, data) => put(`/api/procedures/${id}`, data),
+            deleteProcedure: (id) => deleteRequest(`/api/procedures/${id}`), // NOVO
+
+            // --- Funções de Clientes atualizadas ---
+            listCustomers: () => get("/api/customers"), // NOVO
+            createCustomer: (data) => post("/api/customers", data),
+            updateCustomer: (id, data) => put(`/api/customers/${id}`, data), // NOVO
+            deleteCustomer: (id) => deleteRequest(`/api/customers/${id}`), // NOVO
+
+            // ... (funções de Agendamentos e Chat existentes) ...
+            scheduleNext: (data) => post("/api/appointments/next", data),
+            cancelAppointment: (id, reason) =>
+                post(`/api/appointments/${id}/cancel`, { reason }),
+            rescheduleNext: (id) =>
+                post(`/api/appointments/${id}/reschedule-next`, {}),
+            listNextAppointments: () => get("/api/appointments/next-list"),
+            chatAsk: (message) => post("/api/chat/ask", { message }),
+        };
+    })();

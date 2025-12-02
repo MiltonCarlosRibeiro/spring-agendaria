@@ -165,4 +165,48 @@ const ProceduresUI = (() => {
         setupProcedureModal,
         openProcedureModalForEdit,
     };
+
+// Adicionar a funcionalidade de deletar no createProcedureCard
+function createProcedureCard(procedure, showActions) {
+    // ... (criação do card) ...
+
+    if (showActions) {
+        // ... (criação de btnAgendar e btnEditar) ...
+
+        // --- NOVO: Botão Deletar ---
+        const btnDeletar = document.createElement("button");
+        btnDeletar.className = "btn btn-outline-danger mt-2"; // Use mt-2 para espaçamento
+        btnDeletar.textContent = "Deletar";
+        btnDeletar.onclick = () =>
+            handleDelete(procedure.id, procedure.name); // NOVO HANDLER
+
+        actions.appendChild(btnAgendar);
+        actions.appendChild(btnEditar);
+        actions.appendChild(btnDeletar); // Adicionar o novo botão
+        card.appendChild(actions);
+    // ... (restante do código)
+}
+
+// --- NOVO HANDLER: Deletar Procedimento ---
+async function handleDelete(id, name) {
+    if (!confirm(`Deseja realmente deletar o procedimento ${name}? Isso pode afetar a agenda.`)) return;
+
+    try {
+        await Api.deleteProcedure(id);
+        alert(`Procedimento ${name} deletado com sucesso.`);
+        loadProceduresIntoGrid(); // Recarrega a lista
+    } catch (e) {
+        alert("Erro ao deletar o procedimento.");
+    }
+}
+
+// ... (Restante do código ProceduresUI) ...
+
+return {
+    loadProceduresIntoGrid,
+    loadFeaturedProcedures,
+    setupProcedureModal,
+    openProcedureModalForEdit,
+    // handleDelete // Não precisa expor, é interno.
+};
 })();
