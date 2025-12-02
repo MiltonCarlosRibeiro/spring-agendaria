@@ -1,4 +1,3 @@
-// src/main/java/com/agendaria/agendaria/web/controller/CustomerController.java
 package com.agendaria.agendaria.web.controller;
 
 import com.agendaria.agendaria.domain.model.Customer;
@@ -32,25 +31,26 @@ public class CustomerController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Customer create(@RequestBody Customer c) {
-        // Assume que o ID é nulo ou 0 para criação
         return customerRepository.save(c);
     }
 
-    // --- NOVO: PUT (Atualizar) ---
+    /** Atualiza um cliente existente. (NOVO: PUT) */
     @PutMapping("/{id}")
     public Customer update(@PathVariable Integer id, @RequestBody Customer c) {
+        // Verifica se o ID existe antes de atualizar
         if (!customerRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado para atualização.");
         }
-        c.setId(id); // Garante que o ID do caminho seja usado
+        c.setId(id); // Garante que o ID do path seja usado
         return customerRepository.save(c);
     }
 
-    // --- NOVO: DELETE (Deletar) ---
+    /** Deleta um cliente. (NOVO: DELETE) */
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT) // Retorna 204 (No Content) em caso de sucesso
+    @ResponseStatus(HttpStatus.NO_CONTENT) // Retorna 204 (No Content)
     public void delete(@PathVariable Integer id) {
-        // Lida com a exceção se o cliente tiver agendamentos vinculados (depende da configuração do banco, mas a deleção simples funciona se não houver FK)
         customerRepository.deleteById(id);
     }
+
+
 }

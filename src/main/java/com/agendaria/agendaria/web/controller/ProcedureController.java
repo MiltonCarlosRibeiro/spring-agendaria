@@ -1,4 +1,3 @@
-// src/main/java/com/agendaria/agendaria/web/controller/ProcedureController.java
 package com.agendaria.agendaria.web.controller;
 
 import com.agendaria.agendaria.domain.model.Procedure;
@@ -6,6 +5,7 @@ import com.agendaria.agendaria.repository.ProcedureRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -27,18 +27,22 @@ public class ProcedureController {
         return procedureRepository.save(p);
     }
 
-    // --- NOVO: PUT (Atualizar) ---
+    /** Atualiza um procedimento existente. (NOVO: PUT) */
     @PutMapping("/{id}")
     public Procedure update(@PathVariable Integer id, @RequestBody Procedure p) {
-        // Verificação de existência omitida para simplicidade, mas é boa prática
+        if (!procedureRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Procedimento não encontrado para atualização.");
+        }
         p.setId(id);
         return procedureRepository.save(p);
     }
 
-    // --- NOVO: DELETE (Deletar) ---
+    /** Deleta um procedimento. (NOVO: DELETE) */
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT) // Retorna 204 (No Content) em caso de sucesso
+    @ResponseStatus(HttpStatus.NO_CONTENT) // Retorna 204 (No Content)
     public void delete(@PathVariable Integer id) {
         procedureRepository.deleteById(id);
     }
+
+
 }

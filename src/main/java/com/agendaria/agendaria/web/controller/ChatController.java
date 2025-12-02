@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/chat")
 public class ChatController {
 
+    /** * Responde a uma pergunta de chat. Atualmente retorna apenas a mensagem de volta.
+     * (O problema de eficácia do Chatbot será resolvido no próximo passo).
+     */
     @PostMapping("/ask")
     public ChatResponseDto ask(@RequestBody ChatAskDto dto) {
 
@@ -15,4 +18,6 @@ public class ChatController {
                 .answer("Mensagem recebida: " + dto.getMessage())
                 .build();
     }
+
+
 }

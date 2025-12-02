@@ -80,7 +80,7 @@ public class AppointmentController {
         return toDto(newAppt);
     }
 
-    /** Lista todos os próximos agendamentos */
+    /** Lista todos os próximos agendamentos (Usado na nova tela de Agenda) */
     @GetMapping("/next-list")
     public List<AppointmentResponseDto> listNext() {
 
@@ -102,4 +102,6 @@ public class AppointmentController {
                 .status(a.getStatus().name())
                 .build();
     }
+
+
 }
